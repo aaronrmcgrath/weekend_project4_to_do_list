@@ -15,7 +15,38 @@
 </head>
 
 <body>
-  <h1>HELLO WORLD!</h1>
+
+  <h1 class="heading">Tasks</h1>
+
+  <div class="add-task">
+
+    <form id="task-form">
+
+      <h3 class="add-task-heading">Create New Task</h3>
+
+      <div class="input">
+
+        <label for="task_name">Task Name</label>
+        <input type="text" id="task_name" name="task_name" placeholder="Enter your task"/>
+        <br />
+
+        <label for="task_description">Description</label>
+        <textarea cols="25" rows="3" id="task_description" name="task_description" placeholder="Enter a description"></textarea>
+        <br />
+
+      </div>
+
+      <input class="submit" type="submit" value="Create" />
+
+    </form>
+
+  </div>
+
+  <div class="task-list">
+
+    <!-- <h3 class="list-heading">Task List</h3> -->
+
+  </div>
 </body>
 
 </html>

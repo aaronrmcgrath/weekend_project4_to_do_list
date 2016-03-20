@@ -15,5 +15,5 @@ app.set('port', (process.env.PORT || 7000));
 app.use('/', index);
 
 app.listen(app.get('port'), function(){
-    console.log('Listening on port: ', app.get('port'));
+  console.log('Listening on port: ', app.get('port'));
 });
