@@ -82,4 +82,43 @@ tasks.post('/post', function(req, res) {
   });
 });
 
+
+tasks.delete('/delete', function(req,res) {
+  console.log(req.body.index);
+  var deleteTask = {
+    id: req.body.index
+  };
+  console.log('DELETE successful, here is info:', deleteTask);
+  pg.connect(connectionString, function(err, client, done){
+    var query = client.query('DELETE FROM tasklist WHERE id = ' + deleteTask.id + ';',
+    function(err, result){
+      done();
+
+      if(err){
+        console.log('Error inserting data: ', err);
+        res.send(false);
+      } else {
+        res.send(result);
+        console.log('*** Here is DELETE result: ', result);
+      }
+    });
+
+    // query.on('row', function(row) {
+    //   results.push(row);
+    // });
+    //
+    // query.on('end', function(){
+    //   done();
+    //   return res.json(results);
+    //   console.log('Delete query = ', results);
+    // });
+
+    if(err) {
+      console.log(err);
+    }
+  });
+});
+
+
+
 module.exports = tasks;

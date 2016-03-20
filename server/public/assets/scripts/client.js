@@ -11,6 +11,8 @@ $(document).ready(function(){
 
   getTasks();
   $('.submit').on('click', createTask);
+  $('.task-list').on('click', '.remove', removeTask);
+  // $('.task-list').on('click', '.completed', completeTask);
 
 });
 
@@ -36,8 +38,10 @@ function appendTasks(data) {
   var $el = $('.task-list').last();
 
   for(var i = 0; i < data.length; i++) {
-    $el.append('<p class="task data-index="' + data[i].id +'">' + data[i].task_name +
-    '<br />' + data[i].task_description + '</p>').slideDown('slow');
+    $el.append('<div class="task"><p>' + data[i].task_name +
+    '<br />' + data[i].task_description + '</p>' +
+    '<br /> <button class="remove" data-index="' + data[i].id +'">Remove</button>' +
+    '<button class="completed">Completed</button></div>').slideDown('slow');
   }
 }
 
@@ -51,6 +55,8 @@ function createTask() {
   });
   console.log(task);
   postTasks(task);
+  $('#task-form').find('input[type=text]').val('');
+  $('#task-form').find('textarea').val('');
 }
 
 // Posts information to DB
@@ -66,10 +72,28 @@ function postTasks(task) {
   });
 }
 
+// Removes task from DOM completely and deletes from DB
+function removeTask() {
+  var index = $(this).data();
+  console.log('Here is the deleted items data: ', index);
+  deleteTask(index);
+  $(this).parent().remove();
 
+}
 
+function deleteTask(index){
+  $.ajax({
+    type: 'DELETE',
+    url: '/tasks/delete',
+    data: index,
+    success: function(index) {
+      console.log('Task deleted: ', index);
+      getTasks();
+    }
+  });
+}
 
-// END _-_-_|
+// END _-_-_-_-_|
 
 
 
