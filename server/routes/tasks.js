@@ -84,7 +84,7 @@ tasks.post('/post', function(req, res) {
 
 
 tasks.delete('/delete', function(req,res) {
-  console.log(req.body.index);
+  // console.log(req.body.index);
   var deleteTask = {
     id: req.body.index
   };
@@ -119,6 +119,26 @@ tasks.delete('/delete', function(req,res) {
   });
 });
 
+tasks.put('/put', function(req, res) {
+  var completeTask = {
+    id: req.body.index
+  };
+  console.log('PUT successful:', completeTask);
+
+  pg.connect(connectionString, function(err, client, done){
+    client.query('UPDATE tasklist SET completed = true WHERE id = ' + completeTask.id + ';',
+    function(err, result){
+      done();
+
+      if(err){
+        console.log('Error inserting data: ', err);
+        res.send(false);
+      } else {
+        res.send(result);
+      }
+    });
+  });
+});
 
 
 module.exports = tasks;

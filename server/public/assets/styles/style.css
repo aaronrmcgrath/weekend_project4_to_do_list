@@ -98,6 +98,10 @@ textarea {
   padding: 10px;
 }
 
+.completed {
+  background: green;
+}
+
 /*.list-heading {
 text-align: center;
 text-decoration: underline;

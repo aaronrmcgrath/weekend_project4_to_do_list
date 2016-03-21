@@ -2,7 +2,7 @@
 
 // * Global Variables
 // var taskArray = [];
-
+var taskCount = 0;
 
 // * jQuery loads after DOM is loaded
 $(document).ready(function(){
@@ -12,7 +12,9 @@ $(document).ready(function(){
   getTasks();
   $('.submit').on('click', createTask);
   $('.task-list').on('click', '.remove', removeTask);
-  // $('.task-list').on('click', '.completed', completeTask);
+  $('.task-list').on('click', '.completed', completeTask);
+
+  console.log('Here is the Task Count: ', taskCount);
 
 });
 
@@ -25,7 +27,7 @@ function getTasks() {
     type: 'GET',
     url: '/tasks/get',
     success: function(data) {
-      console.log('GET was successful here is data: ', data);
+      // console.log('GET was successful here is data: ', data);
       // taskArray.push(data);
       appendTasks(data);
     }
@@ -40,8 +42,11 @@ function appendTasks(data) {
   for(var i = 0; i < data.length; i++) {
     $el.append('<div class="task"><p>' + data[i].task_name +
     '<br />' + data[i].task_description + '</p>' +
-    '<br /> <button class="remove" data-index="' + data[i].id +'">Remove</button>' +
-    '<button class="completed">Completed</button></div>').slideDown('slow');
+    '<br /> <button class="remove" data-index="' + data[i].id + '">Remove</button>' +
+    '<button class="completed" data-index="' + data[i].id + '" data-complete="' + data[i].completed + '"' +
+    '">Completed</button></div>').slideDown('slow');
+    console.log('DATA: ', $('.completed').data('complete'), $('.completed').data('index'), $('.completed').data(), data[i]);
+    lookCompleted();
   }
 }
 
@@ -81,6 +86,7 @@ function removeTask() {
 
 }
 
+// ajax request to server to delete task from DB
 function deleteTask(index){
   $.ajax({
     type: 'DELETE',
@@ -92,6 +98,37 @@ function deleteTask(index){
     }
   });
 }
+
+// Removes task from DOM completely and deletes from DB
+function completeTask() {
+  var index = $(this).data();
+  console.log('* -->>> Here is the updated complete items data: ', index);
+  updateComplete(index);
+  // $(this).parent().remove();  //This needs to change the color
+
+}
+
+// ajax request to server to delete task from DB
+function updateComplete(index){
+  $.ajax({
+    type: 'PUT',
+    url: '/tasks/put',
+    data: index,
+    success: function(index) {
+      console.log('Task updated: ', index);
+      getTasks();
+    }
+  });
+}
+
+// Checks to see if task completed = true from DB, if so, adds class chaning the look
+function lookCompleted() {
+  if ($('.completed').data('complete')== true) {
+    $(this).parent().addClass('.completed');
+  }
+}
+
+
 
 // END _-_-_-_-_|
 
