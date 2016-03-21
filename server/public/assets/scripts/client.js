@@ -40,13 +40,17 @@ function appendTasks(data) {
   var $el = $('.task-list').last();
 
   for(var i = 0; i < data.length; i++) {
-    $el.append('<div class="task"><p>' + data[i].task_name +
+
+    var idData = data[i].id;
+    var completedData = data[i].completed;
+    // console.log('!!!: ', completed);
+    $el.append('<div class=" task task' + idData + '" data-divID="' + idData + '"><p>' + data[i].task_name +
     '<br />' + data[i].task_description + '</p>' +
-    '<br /> <button class="remove" data-index="' + data[i].id + '">Remove</button>' +
-    '<button class="completed" data-index="' + data[i].id + '" data-complete="' + data[i].completed + '"' +
+    '<br /> <button class="remove" data-index="' + idData + '">Remove</button>' +
+    '<button class="completed" data-index="' + data[i].id + '" data-complete="' + completedData + '"' +
     '">Completed</button></div>').slideDown('slow');
-    console.log('DATA: ', $('.completed').data('complete'), $('.completed').data('index'), $('.completed').data(), data[i]);
-    lookCompleted();
+    // console.log('DATA: ', data[i]);
+    lookCompleted(completedData, idData);
   }
 }
 
@@ -117,17 +121,26 @@ function updateComplete(index){
     success: function(index) {
       console.log('Task updated: ', index);
       getTasks();
+      // appendTasks(index);
     }
   });
 }
 
 // Checks to see if task completed = true from DB, if so, adds class chaning the look
-function lookCompleted() {
-  if ($('.completed').data('complete')== true) {
-    $(this).parent().addClass('.completed');
+function lookCompleted(data, index) {
+  console.log('Completed status in lookCompleted: ', data);
+  if (data == true) {
+    $('.task' + index).addClass('highlight');
   }
 }
 
+// Converts boolean completed value from DB into a string
+// function boolString (booleanData) {
+//   var boolean = booleanData;
+//   var string = boolean.toString();
+//   console.log(string);
+//   return string;
+// }
 
 
 // END _-_-_-_-_|
